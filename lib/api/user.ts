@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { API_ADD_USER, API_LIST_USER, API_DELETE_USER, API_BASE_URL } from '~/constants/api';
+import { idText } from 'typescript';
+import { API_ENDPOINTS } from '~/constants/api';
 
 // Tạo tài khoản người dùng (ADMIN hoặc MEMBER hoặc MANAGER )
 export const createUser = async (userData: { userName: string; email: string; password: string; role: string; departmentId: string }) => {
@@ -30,7 +31,7 @@ export const createUser = async (userData: { userName: string; email: string; pa
       departmentId: userData.departmentId,
     };
 
-    const response = await axios.post(`${API_ADD_USER}`, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_USER, payload);
 
     if (!response || !response.data) {
       throw new Error('No response or empty data from API');
@@ -47,7 +48,7 @@ export const createUser = async (userData: { userName: string; email: string; pa
 // Danh sách người dùng
 export const listUser = async (page: number, limit: number) => {
   try {
-    const response = await axios.get(`${API_LIST_USER}`, {
+    const response = await axios.get(API_ENDPOINTS().API_LIST_USER, {
       params: { page, limit },
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export const listUser = async (page: number, limit: number) => {
 // Xóa tài khoản
 export const deleteUser = async (userName: string) => {
   try {
-    const response = await axios.post(`${API_DELETE_USER}`, userName);
+    const response = await axios.post(API_ENDPOINTS().API_DELETE_USER, userName);
     return response.data;
   } catch (e) {
     console.error('Error fetching users:', e);
@@ -88,14 +89,16 @@ export const deleteUser = async (userName: string) => {
 }
 
 // Lấy thông tin user theo ID
-export const getUserById = async (id: string) => {
-  const response = await axios.get(`${API_BASE_URL}/user/edit/?id=${id}`)
+export const getUserById = async (id: string) => { 
+  const response = await axios.get(API_ENDPOINTS().API_DELETE_EDIT, {
+    params: {id },
+  })
   return response.data
 }
 
 // Cập nhật thông tin user
 export const updateUser = async (id: string, updateData: Record<string, any>) => {
-  const response = await axios.patch(`${API_BASE_URL}/user/${id}`, updateData, {
+  const response = await axios.patch(API_ENDPOINTS()+`/user/${id}`, updateData, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },

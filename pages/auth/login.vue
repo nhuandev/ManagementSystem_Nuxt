@@ -1,6 +1,6 @@
 <script setup lang="ts">
+
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'  // Hook để sử dụng router trong Nuxt 3
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -8,6 +8,9 @@ import { Label } from '@/components/ui/label'
 
 import { Toaster } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/toast/use-toast'
+definePageMeta({
+  layout: "empty",
+});
 const { toast } = useToast()
 const username = ref('')
 const password = ref('')
@@ -23,7 +26,7 @@ const submit = async () => {
       credentials: 'include',
       body: JSON.stringify({
         username: username.value,
-        password: password.value,
+        password: password.value, 
       }),
     });
 
@@ -96,9 +99,7 @@ const submit = async () => {
       </div>
       <div class="mt-4 text-center text-sm">
         Don't have an account?
-        <a href="#" class="underline">
-          Sign up
-        </a>
+          <NuxtLink to="user/add" >Sign Up</NuxtLink>
       </div>
     </CardContent>
   </Card>

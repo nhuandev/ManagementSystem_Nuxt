@@ -22,6 +22,9 @@ export default {
     }
   }
 }
+definePageMeta({
+  layout: "empty",
+});
 </script>
 
 <template>

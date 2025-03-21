@@ -117,11 +117,11 @@ const data = {
       items: [
         {
           title: 'Thêm tài khoản',
-          url: '/user/add-user',
+          url: '/user/add',
         },
         {
           title: 'Danh sách tài khoản',
-          url: '/user/list-user',
+          url: '/user/list',
         },
 
       ],
@@ -134,11 +134,11 @@ const data = {
       items: [
         {
           title: 'Thêm phòng ban',
-          url: '/depart/add-depart',
+          url: '/depart/add',
         },
         {
           title: 'Danh sách phòng ban',
-          url: '/depart/list-depart',
+          url: '/depart/list',
         },
 
       ],
@@ -151,11 +151,11 @@ const data = {
       items: [
         {
           title: 'Thêm dự án',
-          url: '/project/add-project',
+          url: '/project/add',
         },
         {
           title: 'Danh sách dự án',
-          url: '/project/list-project',
+          url: '/project/list',
         },
 
       ],
@@ -181,7 +181,7 @@ function setActiveMenu(title: string) {
       menu.isActive = true; // Đặt isActive thành true cho mục vừa chọn
     }
   });
-}
+} 
 
 function setActiveTeam(team: typeof data.teams[number]) {
   activeTeam.value = team

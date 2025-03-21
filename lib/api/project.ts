@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_ADD_PROJECT, API_LIST_PROJECT } from '~/constants/api';
+import { API_ENDPOINTS } from '~/constants/api';
 
 
 // Tao dự án 
@@ -22,7 +22,7 @@ export const createProject = async (project: {
         teamMembers: project.teamMembers
     }
 
-    const response = await axios.post(`${API_ADD_PROJECT}`, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_PROJECT, payload);
 
     if (!response || !response.data) {
         throw new Error('No response or empty data from API');
@@ -33,7 +33,7 @@ export const createProject = async (project: {
 // Danh sách dự án 
 export const listProject = async (page: number, limit: number) => {
   try {
-    const response = await axios.get(`${API_LIST_PROJECT}`, {
+    const response = await axios.get(API_ENDPOINTS().API_LIST_PROJECT, {
       params: { page, limit },
       headers: {
         'Content-Type': 'application/json',

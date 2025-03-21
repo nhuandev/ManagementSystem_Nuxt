@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:3005', // URL của NestJS backend
+      API_BASE_URL: process.env.API_BASE_URL,
     },
   },
 

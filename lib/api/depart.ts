@@ -1,4 +1,4 @@
-import { API_ADD_DEPART, API_LIST_DEPART } from "~/constants/api";
+import { API_ENDPOINTS } from "~/constants/api";
 import axios from 'axios'
 
 
@@ -14,7 +14,7 @@ export const createDepart = async (depart: {
         isActive: true
     }
 
-    const response = await axios.post(`${API_ADD_DEPART}`, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_DEPART, payload);
 
     if (!response || !response.data) {
         throw new Error('No response or empty data from API');
@@ -24,7 +24,7 @@ export const createDepart = async (depart: {
 
 export const listDepart = async (page: number, limit: number) => {
     try {
-      const response = await axios.get(`${API_LIST_DEPART}`, {
+      const response = await axios.get(API_ENDPOINTS().API_LIST_DEPART, {
         params: { page, limit },
         headers: {
           'Content-Type': 'application/json',
