@@ -14,7 +14,12 @@ export const createDepart = async (depart: {
         isActive: true
     }
 
-    const response = await axios.post(API_ENDPOINTS().API_ADD_DEPART, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_DEPART, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
 
     if (!response || !response.data) {
         throw new Error('No response or empty data from API');
@@ -28,7 +33,6 @@ export const listDepart = async (page: number, limit: number) => {
         params: { page, limit },
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         withCredentials: true,
       });

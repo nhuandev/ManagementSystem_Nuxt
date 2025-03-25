@@ -1,57 +1,46 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import Button from '~/components/ui/button/Button.vue'
+import { listTasks } from '~/lib/api/task';
 
-import { toast } from '~/components/ui/toast'
-import { listDepart } from '~/lib/api/depart'
 
-interface Depart {
-  departName: string
-  description: string
-  isActive: boolean
+interface Task {
+  name: string;
+    description: string;
+    assignedTo: string; // ID của người phụ trách
+    projectId: string; // ID của dự án
+    status: string;
+    priority: string;
+    deadline: string;
 }
 
-const departs = ref<Depart[]>([])
+const tasks = ref<Task[]>([])
 const currentPage = ref(1)
 const totalPages = ref(1)
 const limit = 5
-const route = useRoute().params.id
-// const userId = route.params.id 
 
-const fetchDeparts = async (page: number) => {
+const listTask = async (page: number) => {
   try {
-    const response = await listDepart(page, limit)
-    departs.value = response.data
+    const response = await listTasks(page, limit)
+    tasks.value = response.data;
     totalPages.value = Math.max(response.totalPages, 1)
     console.log('API Response:', response)
     console.log('Total Pages:', totalPages.value)
   } catch (e) {
-    console.error('Error loading departs:', e)
+    console.error('Error loading tasks:', e)
   }
 }
 
 const handlePageChange = async (page: number) => {
   currentPage.value = page
-  await fetchDeparts(page)
+  await listTask(page)
 }
 
 onMounted(() => {
-  fetchDeparts(1)
+  listTask(1)
 })
-
-
-const handleDeleteDepart = async (departName: string) => {
-
-}
-
-const handleEditDepart = async (id: string) => {
-  return navigateTo(`/depart/edit/${id}`);
-};
 
 definePageMeta({
   layout: "default",
 });
-
 </script>
 
 <template>
@@ -64,12 +53,12 @@ definePageMeta({
         <BreadcrumbList>
           <BreadcrumbItem class="hidden md:block">
             <BreadcrumbLink href="#">
-              Phòng ban
+              Công việc
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator class="hidden md:block" />
           <BreadcrumbItem>
-            <BreadcrumbPage>Danh sách phòng ban</BreadcrumbPage>
+            <BreadcrumbPage>Danh sách</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -77,24 +66,33 @@ definePageMeta({
   </header>
   <div>
     <Table>
-      <!-- <TableCaption>Danh sách nhân sự</TableCaption> -->
       <TableHeader>
         <TableRow>
           <TableHead class="w-[100px]">STT</TableHead>
-          <TableHead>Tên phòng ban</TableHead>
-          <TableHead>Vai trò</TableHead>
-          <TableHead>Trạng thái</TableHead>
-          <TableHead>Công cụ</TableHead>
+          <TableHead>Công việc</TableHead>
+          <TableHead>Mô tả</TableHead>
+          <TableHead>Thuộc dự án</TableHead>
+          <TableHead>Người phụ trách</TableHead>
+          <TableHead>Tiến độ</TableHead>
+          <TableHead>Mức độ ưu tiên</TableHead>
+          <TableHead>Ngày kết thúc</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="(depart, index) in departs">
+        <TableRow v-for="(task, index) in tasks" :key="task._id">
           <TableCell class="font-medium">{{ (currentPage - 1) * limit + index + 1 }}</TableCell>
-          <TableCell>{{ depart.departName }}</TableCell>
-          <TableCell class="truncate max-w-[50vh]" >{{ depart.description }}</TableCell>
-          <TableCell>{{ depart.isActive ? 'Hoạt động' : 'Ngừng hoạt động'  }} </TableCell>
+          <TableCell>{{ task.name }}</TableCell>
+          <TableCell>{{ task.description }}</TableCell>
+          <TableCell>{{task.projectId }}</TableCell>
+          <TableCell>{{ task.assignedTo }}</TableCell>
+          <TableCell>{{ task.status }}</TableCell>
+          <TableCell>{{ task.priority }}  </TableCell>
+          <TableCell>{{ task.deadline }}</TableCell>
           <TableCell>
-            <Button @click="handleDeleteDepart(depart.departName)">
+            <Button @click="" class="ml-2">
+              Chi tiết
+            </Button>
+            <Button @click="" class="ml-2">
               Xóa
             </Button>
           </TableCell>
@@ -132,4 +130,4 @@ definePageMeta({
       <!-- <Icon name="uil:github" style="color: black" /> -->
     </div>
   </div>
-</template>
+</template> 

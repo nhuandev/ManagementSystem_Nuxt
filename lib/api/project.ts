@@ -22,7 +22,12 @@ export const createProject = async (project: {
         teamMembers: project.teamMembers
     }
 
-    const response = await axios.post(API_ENDPOINTS().API_ADD_PROJECT, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_PROJECT, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
 
     if (!response || !response.data) {
         throw new Error('No response or empty data from API');
@@ -37,7 +42,6 @@ export const listProject = async (page: number, limit: number) => {
       params: { page, limit },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       withCredentials: true,
     });

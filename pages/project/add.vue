@@ -185,7 +185,7 @@ definePageMeta({
           <!-- Combobox để chọn người dùng -->
           <ComboboxRoot v-model="modelValue" v-model:open="open" v-model:search-term="searchTerm" class="w-full">
             <ComboboxAnchor as-child>
-              <ComboboxInput placeholder="Tìm kiếm người dùng..." as-child>
+              <ComboboxInput placeholder="Tìm kiếm thành viên..." as-child>
                 <TagsInputInput class="w-full px-3" :class="modelValue.length > 0 ? 'mt-2' : ''"
                   @keydown.enter.prevent />
               </ComboboxInput>
@@ -196,7 +196,7 @@ definePageMeta({
               <ComboboxContent>
                 <CommandList position="popper"
                   class="w-[--radix-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md">
-                  <CommandEmpty v-if="filteredUsers.length === 0">Không tìm thấy người dùng</CommandEmpty>
+                  <CommandEmpty v-if="filteredUsers.length === 0">Không tìm thấy</CommandEmpty>
                   <CommandGroup>
                     <CommandItem v-for="user in filteredUsers" :key="user._id" :value="user.username" @select.prevent="(ev) => {
                       if (typeof ev.detail.value === 'string') {

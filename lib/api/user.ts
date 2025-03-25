@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { idText } from 'typescript';
 import { API_ENDPOINTS } from '~/constants/api';
 
 // Tạo tài khoản người dùng (ADMIN hoặc MEMBER hoặc MANAGER )
@@ -31,7 +30,9 @@ export const createUser = async (userData: { userName: string; email: string; pa
       departmentId: userData.departmentId,
     };
 
-    const response = await axios.post(API_ENDPOINTS().API_ADD_USER, payload);
+    const response = await axios.post(API_ENDPOINTS().API_ADD_USER, payload, {
+      withCredentials: true,
+    });
 
     if (!response || !response.data) {
       throw new Error('No response or empty data from API');
@@ -52,7 +53,6 @@ export const listUser = async (page: number, limit: number) => {
       params: { page, limit },
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       withCredentials: true,
     });
@@ -74,7 +74,9 @@ export const listUser = async (page: number, limit: number) => {
 // Xóa tài khoản
 export const deleteUser = async (userName: string) => {
   try {
-    const response = await axios.post(API_ENDPOINTS().API_DELETE_USER, userName);
+    const response = await axios.post(API_ENDPOINTS().API_DELETE_USER, userName, {
+      withCredentials: true,
+    });
     return response.data;
   } catch (e) {
     console.error('Error fetching users:', e);
@@ -90,18 +92,18 @@ export const deleteUser = async (userName: string) => {
 
 // Lấy thông tin user theo ID
 export const getUserById = async (id: string) => { 
-  const response = await axios.get(API_ENDPOINTS().API_DELETE_EDIT, {
+  const response = await axios.get(API_ENDPOINTS().API_EDIT_USER, {
     params: {id },
+    withCredentials: true,
   })
   return response.data
 }
 
 // Cập nhật thông tin user
 export const updateUser = async (id: string, updateData: Record<string, any>) => {
-  const response = await axios.patch(API_ENDPOINTS()+`/user/${id}`, updateData, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
+  const response = await axios.put(API_ENDPOINTS().API_UPDATE_USER, updateData, {
+    params : {id},
+    withCredentials: true,
   })
   return response.data
 }

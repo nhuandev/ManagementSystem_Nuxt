@@ -12,7 +12,8 @@ export const API_ENDPOINTS = () => {
         API_ADD_USER: `${API_BASE_URL}/user/register`,
         API_LIST_USER: `${API_BASE_URL}/user/list`,
         API_DELETE_USER: `${API_BASE_URL}/user/delete`,
-        API_DELETE_EDIT: `${API_BASE_URL}/user/edit`,
+        API_EDIT_USER: `${API_BASE_URL}/user/edit`,
+        API_UPDATE_USER: `${API_BASE_URL}/user/update`,
 
         // Project
         API_ADD_PROJECT: `${API_BASE_URL}/project/create`,
@@ -21,6 +22,10 @@ export const API_ENDPOINTS = () => {
         // Depart
         API_ADD_DEPART: `${API_BASE_URL}/depart/create`,
         API_LIST_DEPART: `${API_BASE_URL}/depart/list`,
+
+        // Task
+        API_ADD_TASK: `${API_BASE_URL}/task/create`,
+        API_LIST_TASK: `${API_BASE_URL}/task/list`,
     };
 };
 

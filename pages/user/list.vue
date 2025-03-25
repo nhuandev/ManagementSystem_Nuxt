@@ -109,7 +109,6 @@ definePageMeta({
                     <TableHead>Email</TableHead>
                     <TableHead>Vai trò</TableHead>
                     <TableHead>Phòng ban</TableHead>
-                    <TableHead>Trạng thái</TableHead>
                     <TableHead>Công cụ</TableHead>
                 </TableRow>
             </TableHeader>
@@ -130,9 +129,7 @@ definePageMeta({
                         </template>
                     </TableCell>
                     <TableCell>{{ user.departmentId }}</TableCell>
-                    <TableCell>
-                        <Switch id="airplane-mode" />
-                    </TableCell>
+                   
                     <TableCell>
                         <Button @click="handleDeleteUser(user.username)">
                             Xóa

@@ -50,16 +50,16 @@ import {
   AudioWaveform,
   BadgeCheck,
   Bell,
-  BookOpen,
-  Bot,
   ChevronRight,
   ChevronsUpDown,
   Command,
   CreditCard,
   GalleryVerticalEnd,
+  PieChart,
   Plus,
   Sparkles,
   SquareTerminal,
+  User,
 } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -71,7 +71,6 @@ type UserData = {
 }
 
 const userData = useCookie<UserData>('user');
-
 const data = {
   user: {
     name: `${userData.value.username}`,
@@ -99,8 +98,8 @@ const data = {
   {
       title: 'Dashboard',
       url: '/',
-      icon: SquareTerminal,
-      isActive: true,
+      icon: PieChart,
+      isActive: false,
       items: [
         {
           title: 'Thống kê',
@@ -112,7 +111,7 @@ const data = {
     {
       title: 'Đội ngũ',
       url: '/user',
-      icon: SquareTerminal,
+      icon: User,
       isActive: false,
       items: [
         {
@@ -160,6 +159,23 @@ const data = {
 
       ],
     },
+    {
+      title: 'Công việc ',
+      url: '/task',
+      icon: SquareTerminal,
+      isActive: false,
+      items: [
+        {
+          title: 'Thêm công việc',
+          url: '/task/add',
+        },
+        {
+          title: 'Danh sách',
+          url: '/task/list',
+        },
+
+      ],
+    },
     
     
   ],
@@ -170,15 +186,12 @@ const data = {
 
 const activeTeam = ref(data.teams[0])
 
-// Hàm setActiveMenu để cập nhật trạng thái isActive khi click vào title
 function setActiveMenu(title: string) {
   data.navMain.forEach(menu => {
-    // Reset tất cả isActive thành false
     menu.isActive = false;
 
-    // Kiểm tra xem menu có title trùng với title được chọn không
     if (menu.title === title) {
-      menu.isActive = true; // Đặt isActive thành true cho mục vừa chọn
+      menu.isActive = true; 
     }
   });
 } 
