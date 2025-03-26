@@ -8,56 +8,40 @@ import { Label } from '@/components/ui/label'
 
 import { Toaster } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { definePageMeta } from '#build/imports'
+import { useAuthStore } from "@/stores/auth";
 definePageMeta({
   layout: "empty",
 });
 const { toast } = useToast()
 const username = ref('')
 const password = ref('')
-const message = ref('')
-
-const submit = async () => {
-  message.value = '';
-  
+const authStore = useAuthStore();
+const handleLogin = async () => {
   try {
-    const response = await fetch('http://localhost:3005/api/user/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        username: username.value,
-        password: password.value, 
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      message.value = errorData.message || 'Login failed. Please try again.';
+    if (!username.value || !password.value) {
       toast({
-        title: 'Error',
-        description: message.value,
+        title: "Lỗi",
+        description: "Vui lòng điền email và mật khẩu.",
+        variant: "destructive",
       });
       return;
     }
 
-    // Get user data from response
-    const userData = await response.json();
-    
-    toast({
-      title: 'Success',
-      description: 'Login successful',
-    });
+    await authStore.login(username.value, password.value);
 
-    window.location.href = '/';
-    // return navigateTo('/');
-    
-  } catch (error) {
-    message.value = 'An error occurred. Please try again.';
     toast({
-      title: 'Error',
-      description: message.value,
+      title: "Thành công",
+      description: "Đăng nhập thành công!",
     });
-    console.error(error);
+    navigateTo("/");
+  } catch (error) {
+    toast({
+      title: "Lỗi",
+      description:
+        error instanceof Error ? error.message : "Có lỗi xảy ra khi đăng nhập.",
+      variant: "destructive",
+    });
   }
 };
 </script>
@@ -79,7 +63,7 @@ const submit = async () => {
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="username">Name</Label>
-          <Input v-model="username" id="username" type="text" placeholder="m@example.com" required />
+          <Input v-model="username" id="username" type="text" required />
         </div>
         <div class="grid gap-2">
           <div class="flex items-center">
@@ -90,7 +74,7 @@ const submit = async () => {
           </div>
           <Input v-model="password" id="password" type="password" required />
         </div>
-        <Button v-on:click="submit" type="submit" class="w-full">
+        <Button v-on:click="handleLogin" type="submit" class="w-full">
           Login
         </Button>
         <Button variant="outline" class="w-full">
@@ -104,6 +88,6 @@ const submit = async () => {
     </CardContent>
   </Card>
 
-  <div v-if="message" class="text-red-500 mt-2 text-center">{{ message }}</div>
+  <!-- <div v-if="message" class="text-red-500 mt-2 text-center">{{ message }}</div> -->
   <!-- </form> -->
 </template>

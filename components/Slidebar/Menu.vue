@@ -63,20 +63,19 @@ import {
 } from 'lucide-vue-next'
 import { ref } from 'vue'
 
-type UserData = {
-  username: string
-  email: string
-  password: string
-  role: string
-}
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+const isAuthChecking = ref(true);
 
-const userData = useCookie<UserData>('user');
+onMounted(async () => {
+    await authStore.checkAuth();
+    isAuthChecking.value = false;
+});
 const data = {
-  user: {
-    name: `${userData.value.username}`,
-    email: `${userData.value.email}`,
-    // avatar: '/avatars/shadcn.jpg',
-  },
+  // user: {
+  //   name: '',
+  //   role: '',
+  // },
   teams: [
     {
       name: 'Depart 2NH',
@@ -320,10 +319,14 @@ const logout = async () => {
                       CN
                     </AvatarFallback>
                   </Avatar>
-                  <div class="grid flex-1 text-left text-sm leading-tight">
-                    <span class="truncate font-semibold">{{ data.user.name }}</span>
-                    <span class="truncate text-xs">{{ data.user.email }}</span>
-                  </div>
+                  <div v-if="isAuthChecking" class="text-center animate-pulse">
+                <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
+                <div class="h-8 w-full bg-zinc-600 rounded"></div>
+            </div>
+            <div class="grid flex-1 text-left text-sm leading-tight">
+                      <span class="truncate font-semibold">{{ authStore.user?.username }}</span>
+                      <span class="truncate text-xs">{{  authStore.user?.role }}</span>
+                    </div>
                   <ChevronsUpDown class="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -337,9 +340,13 @@ const logout = async () => {
                         CN
                       </AvatarFallback>
                     </Avatar>
+                    <div v-if="isAuthChecking" class="text-center animate-pulse">
+                <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
+                <div class="h-8 w-full bg-zinc-600 rounded"></div>
+            </div>
                     <div class="grid flex-1 text-left text-sm leading-tight">
-                      <span class="truncate font-semibold">{{ data.user.name }}</span>
-                      <span class="truncate text-xs">{{ data.user.email }}</span>
+                      <span class="truncate font-semibold">{{ authStore.user?.username }}</span>
+                      <span class="truncate text-xs">{{  authStore.user?.role }}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>

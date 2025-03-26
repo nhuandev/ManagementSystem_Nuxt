@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Switch } from '@/components/ui/switch'
 import { listUser, deleteUser } from '~/lib/api/user'
 import { ref, onMounted } from 'vue'
 import Button from '~/components/ui/button/Button.vue'
@@ -7,19 +6,18 @@ import Button from '~/components/ui/button/Button.vue'
 import { toast } from '~/components/ui/toast'
 
 interface User {
-    id: number
+    _id: number
     username: string
     email: string
     role: string,
     departmentId: string,
+    password: string,
 }
 
 const users = ref<User[]>([])
 const currentPage = ref(1)
 const totalPages = ref(1)
 const limit = 5
-const route = useRoute().params.id
-// const userId = route.params.id 
 
 const fetchUsers = async (page: number) => {
     try {
@@ -37,11 +35,6 @@ const handlePageChange = async (page: number) => {
     currentPage.value = page
     await fetchUsers(page)
 }
-
-onMounted(() => {
-    fetchUsers(1)
-})
-
 
 const handleDeleteUser = async (username: string) => {
     try {
@@ -68,13 +61,27 @@ const handleDeleteUser = async (username: string) => {
     }
 }
 
-const handleEditUser = async (id: string) => {
-    return navigateTo(`/user/${id}`);
+const handleEditUser = async (user: User) => {
+    navigateTo({
+        path: `/user/${user._id}`,
+        query: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            departmentId: user.departmentId,
+            password: user.password,
+        }
+    });
 };
 
+onMounted(() => {
+    fetchUsers(1)
+})
+
 definePageMeta({
-  layout: "default",
-}); 
+    layout: "default",
+});
 
 </script>
 
@@ -128,13 +135,13 @@ definePageMeta({
                             Quản lý
                         </template>
                     </TableCell>
-                    <TableCell>{{ user.departmentId }}</TableCell>
-                   
+                    <TableCell>{{ user.departmentId.departName }}</TableCell>
+
                     <TableCell>
                         <Button @click="handleDeleteUser(user.username)">
                             Xóa
                         </Button>
-                        <Button @click="handleEditUser(user._id)" class="ml-2">
+                        <Button @click="handleEditUser(user)" class="ml-2">
                             Sửa
                         </Button>
                     </TableCell>

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from '~/components/ui/toast'
-import { getUserById, updateUser } from '~/lib/api/user'
+import { updateUser } from '~/lib/api/user'
 
 import {
     Select,
@@ -17,8 +17,6 @@ import {
 } from '@/components/ui/select'
 import { listDepart } from '~/lib/api/depart'
 
-const route = useRoute()
-const userId = route.params.id as string
 
 interface UserData {
     id?: string;
@@ -29,43 +27,21 @@ interface UserData {
     departmentId: string;
 }
 
-const userData = ref<UserData>({
-    username: '',
-    email: '',
-    role: '',
-    password: '',
-    departmentId: ''
-})
 
-onMounted(async () => {
-    try {
-        const response = await getUserById(userId)
-        console.log('Response:', response)
-
-        if (response.statusCode === 200) {
-            userData.value = {
-                username: response.data.username,
-                email: response.data.email,
-                role: response.data.role,
-                password: response.data.password,
-                departmentId: response.data.departmentId,
-            }
-        }
-        console.log('Role loaded:', userData.value.role)
-    } catch (error) {
-        toast({
-            title: 'Error',
-            description: 'Failed to load user data',
-            duration: 5000,
-        })
-        console.error('Error loading user:', error)
-    }
+const route = useRoute();
+const userDetail = ref<UserData>({
+    id: route.query.id as string,
+    username: route.query.username as string,
+    email: route.query.email as string,
+    role: route.query.role as string,
+    password: route.query.password as string,
+    departmentId: route.query.departmentId as string,
 })
 
 const handleSubmit = async (event: Event) => {
     event.preventDefault()
     try {
-        const response = await updateUser(userId, userData.value)
+        const response = await updateUser(route.query.id as any, userDetail.value)
         if (response) {
             toast({
                 title: 'Success',
@@ -76,11 +52,11 @@ const handleSubmit = async (event: Event) => {
         toast({
             title: 'Error',
             description: 'Failed to update user',
-            duration: 5000,
         })
         console.error('Error updating user:', error)
     }
 }
+
 
 // List data department
 const departs = ref<{ _id: string, departName: string }[]>([])
@@ -120,7 +96,7 @@ definePageMeta({
             <!-- User Name -->
             <div class="flex-1">
                 <Label for="userName" class="text-sm font-medium text-gray-700">Tên đăng nhập</Label>
-                <Input id="userName" type="text" required placeholder="Nhập tên đăng nhập" v-model="userData.username"
+                <Input id="userName" type="text" required placeholder="Nhập tên đăng nhập" v-model="userDetail.username"
                     class="w-full" />
             </div>
 
@@ -128,7 +104,7 @@ definePageMeta({
             <div class="flex-1">
                 <Label for="password" class="text-sm font-medium text-gray-700">Mật khẩu (không bắt buộc)</Label>
                 <Input id="password" type="password" placeholder="Để trống nếu không muốn đổi mật khẩu"
-                    v-model="userData.password" class="w-full" />
+                    v-model="userDetail.password" class="w-full" />
             </div>
         </div>
 
@@ -137,16 +113,16 @@ definePageMeta({
             <!-- Email -->
             <div class="flex-1">
                 <Label for="email" class="text-sm font-medium text-gray-700">Email</Label>
-                <Input id="email" type="email" required placeholder="Nhập email" v-model="userData.email"
+                <Input id="email" type="email" required placeholder="Nhập email" v-model="userDetail.email"
                     class="w-full" />
             </div>
 
             <!-- Role Selection -->
             <div class="flex-1">
                 <Label for="role" class="text-sm font-medium text-gray-700">Vai trò</Label>
-                <Select v-model="userData.role">
+                <Select v-model="userDetail.role">
                     <SelectTrigger class="w-[180px]">
-                        <SelectValue :placeholder="userData.role || 'Chọn vai trò'" />
+                        <SelectValue :placeholder="userDetail.role || 'Chọn vai trò'" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
@@ -160,11 +136,10 @@ definePageMeta({
 
             <div class="flex-1">
                 <Label for="depart" class="text-sm font-medium text-gray-700">Phòng ban</Label>
-                <select v-model="userData.departmentId" class="p-2 border rounded">
+                <select v-model="userDetail.departmentId" class="p-2 border rounded">
                     <option v-for="(depart, index) in departs" :key="depart._id" :value="depart._id">
                         ({{ index + 1 }}) ({{ depart.departName }})
                     </option>
-
                 </select>
             </div>
         </div>

@@ -70,7 +70,6 @@ definePageMeta({
         <TableRow>
           <TableHead class="w-[100px]">STT</TableHead>
           <TableHead>Công việc</TableHead>
-          <TableHead>Mô tả</TableHead>
           <TableHead>Thuộc dự án</TableHead>
           <TableHead>Người phụ trách</TableHead>
           <TableHead>Tiến độ</TableHead>
@@ -82,14 +81,13 @@ definePageMeta({
         <TableRow v-for="(task, index) in tasks" :key="task._id">
           <TableCell class="font-medium">{{ (currentPage - 1) * limit + index + 1 }}</TableCell>
           <TableCell>{{ task.name }}</TableCell>
-          <TableCell>{{ task.description }}</TableCell>
-          <TableCell>{{task.projectId }}</TableCell>
-          <TableCell>{{ task.assignedTo }}</TableCell>
+          <TableCell>{{task.projectId.name }}</TableCell>
+          <TableCell>{{ task.assignedTo.username }}</TableCell>
           <TableCell>{{ task.status }}</TableCell>
           <TableCell>{{ task.priority }}  </TableCell>
           <TableCell>{{ task.deadline }}</TableCell>
           <TableCell>
-            <Button @click="" class="ml-2">
+            <Button @click="">
               Chi tiết
             </Button>
             <Button @click="" class="ml-2">

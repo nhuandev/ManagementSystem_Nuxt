@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { definePageMeta } from '#build/imports';
 import { BarChart } from '@/components/ui/chart-bar'
 
 const data = [

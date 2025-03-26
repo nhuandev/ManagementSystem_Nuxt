@@ -16,6 +16,7 @@ import {
 
 import { toast } from '~/components/ui/toast'
 import { listDepart } from '~/lib/api/depart'
+import { definePageMeta } from '#build/imports'
 
 // Định nghĩa kiểu dữ liệu cho user
 interface UserData {
@@ -71,6 +72,7 @@ const fetchDeparts = async () => {
   }
 };
 onMounted(fetchDeparts);
+
 definePageMeta({
   layout: "default",
 });

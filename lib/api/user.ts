@@ -56,8 +56,9 @@ export const listUser = async (page: number, limit: number) => {
       },
       withCredentials: true,
     });
-
-    return response.data;
+   
+      return response.data;
+  
   } catch (e) {
     console.error('Error fetching users:', e);
 
@@ -88,15 +89,6 @@ export const deleteUser = async (userName: string) => {
       }
     })
   }
-}
-
-// Lấy thông tin user theo ID
-export const getUserById = async (id: string) => { 
-  const response = await axios.get(API_ENDPOINTS().API_EDIT_USER, {
-    params: {id },
-    withCredentials: true,
-  })
-  return response.data
 }
 
 // Cập nhật thông tin user

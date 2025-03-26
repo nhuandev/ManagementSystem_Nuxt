@@ -2,15 +2,18 @@
 import { ref, onMounted } from 'vue'
 import Button from '~/components/ui/button/Button.vue'
 
-import { toast } from '~/components/ui/toast'
-import { listDepart } from '~/lib/api/depart'
+import { Toaster } from '@/components/ui/toast'
+import { useToast } from '@/components/ui/toast/use-toast'
+import { listDepart, deleteDepart } from '~/lib/api/depart'
 
 interface Depart {
+  _id: string,
   departName: string
   description: string
   isActive: boolean
 }
 
+const { toast } = useToast()
 const departs = ref<Depart[]>([])
 const currentPage = ref(1)
 const totalPages = ref(1)
@@ -35,18 +38,47 @@ const handlePageChange = async (page: number) => {
   await fetchDeparts(page)
 }
 
+const handleDeleteDepart = async (_id: string) => {
+  try {
+        const confirmed = window.confirm('Bạn có chắc chắn muốn xóa người dùng này?')
+        if (!confirmed) return
+        const response = await deleteDepart(_id);
+
+        if (response.statusCode == 200) {
+            console.log(response.statusCode);
+            toast({
+                title: "Thành công",
+                description: "Xóa thành công"
+            })
+            await fetchDeparts(currentPage.value)
+        } else {
+            toast({
+                title: "Lỗi",
+                description: response.message,
+                variant: "destructive",
+            })
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error)
+    }
+}
+
+const handleEditDepart = (depart: Depart) => {
+  navigateTo({
+    path:`/depart/${depart._id}`,
+    query: {
+      _id: depart._id,
+      departName: depart.departName,
+      description: depart.description,
+    }
+  });
+};
+
+
 onMounted(() => {
   fetchDeparts(1)
 })
 
-
-const handleDeleteDepart = async (departName: string) => {
-
-}
-
-const handleEditDepart = async (id: string) => {
-  return navigateTo(`/depart/edit/${id}`);
-};
 
 definePageMeta({
   layout: "default",
@@ -55,6 +87,7 @@ definePageMeta({
 </script>
 
 <template>
+  <Toaster/>
   <header
     class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
     <div class="flex items-center gap-2 px-4">
@@ -76,6 +109,7 @@ definePageMeta({
     </div>
   </header>
   <div>
+
     <Table>
       <!-- <TableCaption>Danh sách nhân sự</TableCaption> -->
       <TableHeader>
@@ -94,8 +128,11 @@ definePageMeta({
           <TableCell class="truncate max-w-[50vh]" >{{ depart.description }}</TableCell>
           <TableCell>{{ depart.isActive ? 'Hoạt động' : 'Ngừng hoạt động'  }} </TableCell>
           <TableCell>
-            <Button @click="handleDeleteDepart(depart.departName)">
+            <Button @click="handleDeleteDepart(depart._id)">
               Xóa
+            </Button>
+            <Button @click="handleEditDepart(depart)" class="ml-2">
+              Sửa
             </Button>
           </TableCell>
         </TableRow>

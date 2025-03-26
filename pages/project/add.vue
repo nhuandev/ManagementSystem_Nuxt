@@ -8,6 +8,7 @@ import { createProject } from '~/lib/api/project'
 import { listUser } from '~/lib/api/user'
 import { useRouter } from 'vue-router';
 import { toast } from '~/components/ui/toast'
+import { definePageMeta } from '#build/imports';
 
 interface Project {
   name: string;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { listProject } from '~/lib/api/project';
 import { computed } from 'vue';
+import { definePageMeta } from '#build/imports';
 
 interface Project {
   name: string;
@@ -101,12 +102,12 @@ definePageMeta({
           <TableCell>{{ project.startDate }}</TableCell>
           <TableCell>{{ project.endDate }}</TableCell>
           <TableCell>{{ calculateMonthsAndDays(project.startDate, project.endDate) }}</TableCell>
-          <TableCell>{{ project.managerId }}</TableCell>
+          <TableCell>{{ project.managerId.username }}</TableCell>
           <TableCell>
             {{project.teamMembers.map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(', ')}}
           </TableCell>
           <TableCell>
-            <Button @click="" class="ml-2">
+            <Button @click="" >
               Chi tiết
             </Button>
             <Button @click="" class="ml-2">

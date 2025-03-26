@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { createDepart } from '~/lib/api/depart'
 import { toast } from '~/components/ui/toast'
+import { definePageMeta } from '#build/imports'
 
 interface Depart {
   departName: string,
