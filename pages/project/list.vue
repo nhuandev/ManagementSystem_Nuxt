@@ -3,15 +3,22 @@ import { listProject } from '~/lib/api/project';
 import { computed } from 'vue';
 import { definePageMeta } from '#build/imports';
 
+interface User {
+  _id: string;
+  username: string;
+}
+
 interface Project {
+  _id: string,
   name: string;
   description: string;
   startDate: string;
   endDate: string;
   budget: number;
-  managerId: string;
-  teamMembers: string[];
+  managerId: User; // Sửa lại để chứa thông tin user thay vì chỉ là string
+  teamMembers: User[]; // Sửa lại để chứa danh sách user object thay vì string[]
 }
+
 
 const projects = ref<Project[]>([])
 const currentPage = ref(1)
@@ -104,10 +111,12 @@ definePageMeta({
           <TableCell>{{ calculateMonthsAndDays(project.startDate, project.endDate) }}</TableCell>
           <TableCell>{{ project.managerId.username }}</TableCell>
           <TableCell>
-            {{project.teamMembers.map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(', ')}}
+            {{project.teamMembers.map(member => member.username.charAt(0).toUpperCase() +
+              member.username.slice(1)).join(', ') }}
           </TableCell>
+
           <TableCell>
-            <Button @click="" >
+            <Button @click="">
               Chi tiết
             </Button>
             <Button @click="" class="ml-2">

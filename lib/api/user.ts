@@ -73,11 +73,12 @@ export const listUser = async (page: number, limit: number) => {
 };
 
 // Xóa tài khoản
-export const deleteUser = async (userName: string) => {
+export const deleteUser = async (id: string) => {
   try {
-    const response = await axios.post(API_ENDPOINTS().API_DELETE_USER, userName, {
-      withCredentials: true,
-    });
+    const response = await axios.post(API_ENDPOINTS().API_DELETE_USER, 
+      {id},
+      {withCredentials: true}
+    );
     return response.data;
   } catch (e) {
     console.error('Error fetching users:', e);

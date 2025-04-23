@@ -2,11 +2,11 @@
 import { listUser, deleteUser } from '~/lib/api/user'
 import { ref, onMounted } from 'vue'
 import Button from '~/components/ui/button/Button.vue'
-
-import { toast } from '~/components/ui/toast'
+import { Toaster } from '@/components/ui/toast'
+import { useToast } from '@/components/ui/toast/use-toast'
 
 interface User {
-    _id: number
+    _id: string,
     username: string
     email: string
     role: string,
@@ -14,10 +14,11 @@ interface User {
     password: string,
 }
 
+const { toast } = useToast()
 const users = ref<User[]>([])
 const currentPage = ref(1)
 const totalPages = ref(1)
-const limit = 5
+const limit = 2
 
 const fetchUsers = async (page: number) => {
     try {
@@ -36,24 +37,25 @@ const handlePageChange = async (page: number) => {
     await fetchUsers(page)
 }
 
-const handleDeleteUser = async (username: string) => {
+const handleDeleteUser = async (_id: string) => {
     try {
         const confirmed = window.confirm('Bạn có chắc chắn muốn xóa người dùng này?')
         if (!confirmed) return
 
-        const response = await deleteUser(username);
+        const response = await deleteUser(_id);
 
         if (response.statusCode == 200) {
             console.log(response.statusCode);
             toast({
                 title: "Thành công",
-                description: "Xóa người dùng thành công"
+                description: response.message,
             })
             await fetchUsers(currentPage.value)
         } else {
             toast({
                 title: "Lỗi",
-                description: "Không thể xóa người dùng"
+                description: response.message,
+                variant: "destructive",
             })
         }
     } catch (error) {
@@ -86,6 +88,7 @@ definePageMeta({
 </script>
 
 <template>
+    <Toaster/>
     <header
         class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
         <div class="flex items-center gap-2 px-4">
@@ -120,7 +123,7 @@ definePageMeta({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="(user, index) in users" :key="user.id">
+                <TableRow v-for="(user, index) in users" :key="user._id">
                     <TableCell class="font-medium">{{ (currentPage - 1) * limit + index + 1 }}</TableCell>
                     <TableCell>{{ user.username }}</TableCell>
                     <TableCell>{{ user.email }}</TableCell>
@@ -138,7 +141,7 @@ definePageMeta({
                     <TableCell>{{ user.departmentId.departName }}</TableCell>
 
                     <TableCell>
-                        <Button @click="handleDeleteUser(user.username)">
+                        <Button @click="handleDeleteUser(user._id)">
                             Xóa
                         </Button>
                         <Button @click="handleEditUser(user)" class="ml-2">

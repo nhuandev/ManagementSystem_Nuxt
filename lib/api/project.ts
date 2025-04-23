@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { API_ENDPOINTS } from '~/constants/api';
 
-
 // Tao dự án 
 export const createProject = async (project: {
     name: string;
@@ -9,8 +8,8 @@ export const createProject = async (project: {
     startDate: string;
     endDate: string;
     status: string;
-    managerId: string;
-    teamMembers: string[]
+    managerId: Object;
+    teamMembers: Object[]
 }) => {
     const payload = {
         name: project.name,

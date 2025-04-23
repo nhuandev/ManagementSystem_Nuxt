@@ -14,7 +14,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { toast } from '~/components/ui/toast'
+import { Toaster } from '@/components/ui/toast'
+import { useToast } from '~/components/ui/toast'
 import { listDepart } from '~/lib/api/depart'
 import { definePageMeta } from '#build/imports'
 
@@ -35,28 +36,24 @@ const userData = ref<UserData>({
   departmentId: '',
 })
 
+
+const { toast } = useToast()
 const handleSubmit = async () => {
   try {
-    const message = ref('');
     const response = await createUser(userData.value)
-    if (response) {
+    if (response.statusCode === 200) {
       toast({
-        title: 'Success',
-        description: 'Create user successful',
+        title: 'Thành công',
+        description: response.message,
       });
+    } else {
+      toast({ 
+          title: 'Thất bại',
+          description: response.message,
+          variant: 'destructive',
+        });
     }
-    toast({
-      title: 'Fail',
-      description: message.value,
-      duration: 1000,
-    });
-
   } catch (error) {
-    toast({
-      title: 'Error',
-      description: 'Create user error',
-      duration: 5000,
-    });
     console.error('Error:', error)
   }
 }
@@ -79,6 +76,7 @@ definePageMeta({
 </script>
 
 <template>
+  <Toaster/>
   <header
     class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
     <div class="flex items-center gap-2 px-4">
@@ -88,7 +86,7 @@ definePageMeta({
         <BreadcrumbList>
           <BreadcrumbItem class="hidden md:block">
             <BreadcrumbLink href="#">
-              Đội ngũ hệ thống
+              Đội ngũ
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator class="hidden md:block" />
@@ -100,7 +98,7 @@ definePageMeta({
     </div>
   </header>
   <Toaster />
-  <form class="p-6 bg-white rounded-lg shadow-md space-y-6" @submit="handleSubmit">
+  <form class="p-6 bg-white rounded-lg shadow-md space-y-6" @submit.prevent="handleSubmit">
     <!-- User Name and Password in one row -->
     <div class="flex space-x-4">
       <!-- User Name -->
@@ -127,7 +125,8 @@ definePageMeta({
       <div class="flex-1">
         <Label for="depart" class="text-sm font-medium text-gray-700">Phòng ban</Label>
         <select v-model="userData.departmentId" class="p-2 border rounded">
-          <option v-for="(depart, index) in departs" :key="depart._id" :value="depart._id">
+          <option v-for="(depart, index) in departs" :key="depart._id" :value="depart._id" >
+            
             ({{ index + 1 }}) ({{ depart.departName }}) {{ depart.departName }}
           </option>
 
@@ -163,7 +162,7 @@ definePageMeta({
 
     <!-- Submit Button -->
     <div class="flex justify-center mt-4">
-      <Button type="submit">
+      <Button>
         Thêm
       </Button>
     </div>

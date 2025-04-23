@@ -1,16 +1,9 @@
 <script setup lang=ts>
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { 
   Avatar,
-  AvatarFallback, 
-  AvatarImage } from '@/components/ui/avatar'
+  AvatarFallback,
+  AvatarImage
+} from '@/components/ui/avatar'
 import {
   Collapsible,
   CollapsibleContent,
@@ -68,33 +61,19 @@ const authStore = useAuthStore();
 const isAuthChecking = ref(true);
 
 onMounted(async () => {
-    await authStore.checkAuth();
-    isAuthChecking.value = false;
+  await authStore.checkAuth();
+  isAuthChecking.value = false;
 });
 const data = {
-  // user: {
-  //   name: '',
-  //   role: '',
-  // },
   teams: [
     {
       name: 'Depart 2NH',
       logo: GalleryVerticalEnd,
       plan: 'Corporate Department',
     },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
   ],
   navMain: [
-  {
+    {
       title: 'Dashboard',
       url: '/',
       icon: PieChart,
@@ -175,13 +154,10 @@ const data = {
 
       ],
     },
-    
-    
+
+
   ],
-
 }
-
-
 
 const activeTeam = ref(data.teams[0])
 
@@ -190,34 +166,28 @@ function setActiveMenu(title: string) {
     menu.isActive = false;
 
     if (menu.title === title) {
-      menu.isActive = true; 
+      menu.isActive = true;
     }
   });
-} 
-
-function setActiveTeam(team: typeof data.teams[number]) {
-  activeTeam.value = team
 }
 
 const logout = async () => {
   try {
-    console.log('Response:', 1) 
+    console.log('Response:', 1)
     await fetch('http://localhost:3005/api/user/logout', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    console.log('Response:', 2) 
+    console.log('Response:', 2)
     return navigateTo('/auth/login')
   } catch (error) {
     console.error('Logout failed', error);
   }
 };
 
-
-
-
 </script>
+
 
 <template>
   <SidebarProvider>
@@ -237,74 +207,44 @@ const logout = async () => {
                     <span class="truncate font-semibold">{{ activeTeam.name }}</span>
                     <span class="truncate text-xs">{{ activeTeam.plan }}</span>
                   </div>
-                  <ChevronsUpDown class="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent class="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg" align="start"
-                side="bottom" :side-offset="4">
-                <DropdownMenuLabel class="text-xs text-muted-foreground">
-                  Teams
-                </DropdownMenuLabel>
-                <DropdownMenuItem v-for="(team, index) in data.teams" :key="team.name" class="gap-2 p-2"
-                  @click="setActiveTeam(team)">
-                  <div class="flex size-6 items-center justify-center rounded-sm border">
-                    <component :is="team.logo" class="size-4 shrink-0" />
-                  </div>
-                  {{ team.name }}
-                  <DropdownMenuShortcut>⌘{{ index + 1 }}</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem class="gap-2 p-2">
-                  <div class="flex size-6 items-center justify-center rounded-md border bg-background">
-                    <Plus class="size-4" />
-                  </div>
-                  <div class="font-medium text-muted-foreground">
-                    Add team
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
 
-
       <!--  -->
       <SidebarContent>
-  <SidebarGroup>
-    <SidebarMenu>
-      <Collapsible 
-        v-for="item in data.navMain" 
-        :key="item.title" 
-        as-child 
-        :default-open="item.isActive" 
-        class="group/collapsible"
-      >
-        <SidebarMenuItem>
-          <CollapsibleTrigger as-child>
-            <SidebarMenuButton :tooltip="item.title" @click="setActiveMenu(item.title)">
-              <component :is="item.icon" />
-              <span>{{ item.title }}</span>
-              <ChevronRight 
-                class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <SidebarMenuSub>
-              <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
-                <SidebarMenuSubButton as-child>
-                  <a :href="subItem.url">
-                    <span>{{ subItem.title }}</span>
-                  </a>
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            </SidebarMenuSub>
-          </CollapsibleContent>
-        </SidebarMenuItem>
-      </Collapsible>
-    </SidebarMenu>
-  </SidebarGroup>
-</SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <Collapsible v-for="item in data.navMain" :key="item.title" as-child :default-open="item.isActive"
+              class="group/collapsible">
+              <SidebarMenuItem>
+                <CollapsibleTrigger as-child>
+                  <SidebarMenuButton :tooltip="item.title" @click="setActiveMenu(item.title)">
+                    <component :is="item.icon" />
+                    <span>{{ item.title }}</span>
+                    <ChevronRight
+                      class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
+                      <SidebarMenuSubButton as-child>
+                        <a :href="subItem.url">
+                          <span>{{ subItem.title }}</span>
+                        </a>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
 
       <SidebarFooter>
         <SidebarMenu>
@@ -320,13 +260,13 @@ const logout = async () => {
                     </AvatarFallback>
                   </Avatar>
                   <div v-if="isAuthChecking" class="text-center animate-pulse">
-                <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
-                <div class="h-8 w-full bg-zinc-600 rounded"></div>
-            </div>
-            <div class="grid flex-1 text-left text-sm leading-tight">
-                      <span class="truncate font-semibold">{{ authStore.user?.username }}</span>
-                      <span class="truncate text-xs">{{  authStore.user?.role }}</span>
-                    </div>
+                    <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
+                    <div class="h-8 w-full bg-zinc-600 rounded"></div>
+                  </div>
+                  <div v-else class="grid flex-1 text-left text-sm leading-tight">
+                    <span class="truncate font-semibold">{{ authStore.user?.username || 'Đang tải'}}</span>
+                    <span class="truncate text-xs">{{ authStore.user?.role || 'Đang tải'}}</span>
+                  </div>
                   <ChevronsUpDown class="ml-auto size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -341,40 +281,18 @@ const logout = async () => {
                       </AvatarFallback>
                     </Avatar>
                     <div v-if="isAuthChecking" class="text-center animate-pulse">
-                <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
-                <div class="h-8 w-full bg-zinc-600 rounded"></div>
-            </div>
-                    <div class="grid flex-1 text-left text-sm leading-tight">
-                      <span class="truncate font-semibold">{{ authStore.user?.username }}</span>
-                      <span class="truncate text-xs">{{  authStore.user?.role }}</span>
+                      <div class="h-5 w-20 bg-zinc-600 rounded mb-2"></div>
+                      <div class="h-8 w-full bg-zinc-600 rounded"></div>
+                    </div>
+                    <div v-else class="grid flex-1 text-left text-sm leading-tight">
+                      <span class="truncate font-semibold">{{ authStore.user?.username || 'Đang tải'}}</span>
+                      <span class="truncate text-xs">{{ authStore.user?.role || 'Đang tải'}}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Sparkles />
-                    Upgrade to Pro
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <BadgeCheck />
-                    Account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard />
-                    Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell />
-                    Notifications
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+               
                 <DropdownMenuItem>
-                  <a class="nav-link" @click.prevent="logout">Logout</a>
+                  <a class="nav-link" @click.prevent="logout">Đăng xuất</a>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -385,7 +303,7 @@ const logout = async () => {
     </Sidebar>
 
     <SidebarInset>
-      
+
 
       <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
         <NuxtPage />
@@ -395,5 +313,3 @@ const logout = async () => {
 
   </SidebarProvider>
 </template>
-
-

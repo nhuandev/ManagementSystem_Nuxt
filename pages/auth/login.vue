@@ -53,37 +53,37 @@ const handleLogin = async () => {
   <Card class="mx-auto max-w-sm">
     <CardHeader>
       <CardTitle class="text-2xl">
-        Login
+        Đăng nhập
       </CardTitle>
       <CardDescription>
-        Enter your email below to login to your account
+        Nhập tên đăng nhập và mật khẩu của bạn để vào hệ thống 2NH
       </CardDescription>
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="username">Name</Label>
+          <Label for="username">Tên đăng nhập</Label>
           <Input v-model="username" id="username" type="text" required />
         </div>
         <div class="grid gap-2">
           <div class="flex items-center">
-            <Label for="password">Password</Label>
+            <Label for="password">Mật khẩu</Label>
             <a href="#" class="ml-auto inline-block text-sm underline">
-              Forgot your password?
+              Quên mật khẩu?
             </a>
           </div>
           <Input v-model="password" id="password" type="password" required />
         </div>
         <Button v-on:click="handleLogin" type="submit" class="w-full">
-          Login
+          Đăng nhập
         </Button>
-        <Button variant="outline" class="w-full">
+        <!-- <Button variant="outline" class="w-full">
           Login with Google
-        </Button>
+        </Button> -->
       </div>
       <div class="mt-4 text-center text-sm">
-        Don't have an account?
-          <NuxtLink to="user/add" >Sign Up</NuxtLink>
+        Bạn chưa có tài khoản? 
+          <NuxtLink to="/auth/register" >Đăng ký</NuxtLink>
       </div>
     </CardContent>
   </Card>
